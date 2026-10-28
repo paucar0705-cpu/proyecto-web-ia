@@ -1,6 +1,8 @@
 // ===== Explorador de Rick and Morty =====
 // Dirección de la API pública de donde salen los personajes
 const API_URL = "https://rickandmortyapi.com/api/character";
+// Nombre con el que se guardan los favoritos en localStorage
+const CLAVE_FAVORITOS = "favoritosRickMorty";
 
 // Traducciones para mostrar los datos de la API en español
 const ESTADOS = { Alive: "Vivo", Dead: "Muerto", unknown: "Desconocido" };
@@ -24,11 +26,15 @@ const paginacion = document.getElementById("paginacion");
 const botonAnterior = document.getElementById("pagina-anterior");
 const botonSiguiente = document.getElementById("pagina-siguiente");
 const textoPagina = document.getElementById("texto-pagina");
+const contenedorFavoritos = document.getElementById("contenedor-favoritos");
+const mensajeFavoritos = document.getElementById("mensaje-favoritos");
+const contadorFavoritos = document.getElementById("contador-favoritos");
 
 // Estado de la aplicación
 let paginaActual = 1;
 let totalPaginas = 1;
 let personajesActuales = [];
+let favoritos = cargarFavoritos();
 
 // Arma la URL con la página, el texto buscado y los filtros elegidos
 // Ejemplo: https://rickandmortyapi.com/api/character?page=1&name=rick&status=alive
@@ -105,6 +111,7 @@ function traducir(diccionario, valor) {
 
 // Crea el HTML de una tarjeta con la imagen y la descripción del personaje
 function crearTarjeta(personaje) {
+  const favorito = esFavorito(personaje.id);
   const origen = personaje.origin.name === "unknown" ? "Desconocido" : personaje.origin.name;
   const ubicacion = personaje.location.name === "unknown" ? "Desconocida" : personaje.location.name;
 
@@ -123,6 +130,9 @@ function crearTarjeta(personaje) {
           <li><strong>Última ubicación:</strong> ${ubicacion}</li>
           <li><strong>Episodios:</strong> ${personaje.episode.length}</li>
         </ul>
+        <button type="button" class="boton-favorito ${favorito ? "activo" : ""}" data-id="${personaje.id}">
+          ${favorito ? "★ Quitar de favoritos" : "☆ Agregar a favoritos"}
+        </button>
       </div>
     </article>`;
 }
@@ -131,6 +141,54 @@ function crearTarjeta(personaje) {
 function mostrarPersonajes(lista) {
   contenedor.innerHTML = lista.map(crearTarjeta).join("");
 }
+
+// ===== Favoritos con localStorage =====
+// localStorage solo guarda texto, por eso se usa JSON.stringify / JSON.parse
+function cargarFavoritos() {
+  try {
+    return JSON.parse(localStorage.getItem(CLAVE_FAVORITOS)) || [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function guardarFavoritos() {
+  localStorage.setItem(CLAVE_FAVORITOS, JSON.stringify(favoritos));
+}
+
+function esFavorito(id) {
+  return favoritos.some((favorito) => favorito.id === id);
+}
+
+// Agrega el personaje si no estaba en favoritos, o lo quita si ya estaba
+function alternarFavorito(id) {
+  if (esFavorito(id)) {
+    favoritos = favoritos.filter((favorito) => favorito.id !== id);
+  } else {
+    const personaje = personajesActuales.find((p) => p.id === id);
+    if (personaje) favoritos.push(personaje);
+  }
+
+  guardarFavoritos();
+  mostrarPersonajes(personajesActuales); // para actualizar la estrella del botón
+  mostrarFavoritos();
+}
+
+function mostrarFavoritos() {
+  contadorFavoritos.textContent = favoritos.length;
+  mensajeFavoritos.hidden = favoritos.length > 0;
+  contenedorFavoritos.innerHTML = favoritos.map(crearTarjeta).join("");
+}
+
+// Un solo "escuchador" por contenedor detecta el clic en cualquier botón de favorito
+function manejarClicFavorito(evento) {
+  const boton = evento.target.closest(".boton-favorito");
+  if (!boton) return;
+  alternarFavorito(Number(boton.dataset.id));
+}
+
+contenedor.addEventListener("click", manejarClicFavorito);
+contenedorFavoritos.addEventListener("click", manejarClicFavorito);
 
 // Muestra un mensaje de cargando, sin resultados o error
 function mostrarMensaje(texto, tipo, conReintento = false) {
@@ -191,5 +249,6 @@ botonLimpiar.addEventListener("click", () => {
 botonAnterior.addEventListener("click", () => cambiarPagina(paginaActual - 1));
 botonSiguiente.addEventListener("click", () => cambiarPagina(paginaActual + 1));
 
-// Al abrir la página se cargan los primeros 20 personajes
+// Al abrir la página se cargan los primeros 20 personajes y los favoritos guardados
 obtenerPersonajes();
+mostrarFavoritos();
