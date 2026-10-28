@@ -252,3 +252,23 @@ botonSiguiente.addEventListener("click", () => cambiarPagina(paginaActual + 1));
 // Al abrir la página se cargan los primeros 20 personajes y los favoritos guardados
 obtenerPersonajes();
 mostrarFavoritos();
+
+// ===== Mejora extra: modo oscuro / claro =====
+// Se agrega o quita la clase "oscuro" en <body>; el CSS cambia los colores con ella.
+// La preferencia se guarda en localStorage para recordarla al volver a entrar.
+const CLAVE_TEMA = "temaRickMorty";
+const botonTema = document.getElementById("boton-tema");
+
+function aplicarTema(tema) {
+  const oscuro = tema === "oscuro";
+  document.body.classList.toggle("oscuro", oscuro);
+  botonTema.textContent = oscuro ? "☀️ Modo claro" : "🌙 Modo oscuro";
+}
+
+botonTema.addEventListener("click", () => {
+  const nuevoTema = document.body.classList.contains("oscuro") ? "claro" : "oscuro";
+  localStorage.setItem(CLAVE_TEMA, nuevoTema);
+  aplicarTema(nuevoTema);
+});
+
+aplicarTema(localStorage.getItem(CLAVE_TEMA) || "claro");
