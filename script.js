@@ -67,18 +67,35 @@ async function obtenerPersonajes() {
     }
 
     const datos = await respuesta.json();
-    personajesActuales = datos.results;
+    personajesActuales = filtrarEspecieExacta(datos.results);
     totalPaginas = datos.info.pages;
 
     ocultarMensaje();
     mostrarPersonajes(personajesActuales);
-    resumen.textContent = `Se encontraron ${datos.info.count} personajes.`;
     actualizarPaginacion();
+
+    if (filtroEspecie.value) {
+      resumen.textContent = `Mostrando ${personajesActuales.length} personajes de esta especie en la página.`;
+    } else {
+      resumen.textContent = `Se encontraron ${datos.info.count} personajes.`;
+    }
+
+    if (personajesActuales.length === 0) {
+      mostrarMensaje("En esta página no hay personajes de esa especie. Prueba con la siguiente página.", "vacio");
+    }
   } catch (error) {
     // Entra aquí si no hay internet, la API está caída o hubo un error arriba
     console.error(error);
     mostrarMensaje("No se pudo consultar la API. Revisa tu conexión a internet e inténtalo de nuevo.", "error", true);
   }
+}
+
+// La API busca coincidencias parciales: species=Human también trae "Humanoid".
+// Por eso volvemos a filtrar aquí, quedándonos solo con la especie exacta.
+function filtrarEspecieExacta(lista) {
+  const especie = filtroEspecie.value;
+  if (!especie) return lista;
+  return lista.filter((personaje) => personaje.species === especie);
 }
 
 // Convierte un valor en inglés a español (si no hay traducción, lo deja igual)
