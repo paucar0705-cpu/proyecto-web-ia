@@ -11,6 +11,12 @@ const ESPECIES = {
 };
 
 // Referencias a los elementos del HTML
+const formulario = document.getElementById("formulario-busqueda");
+const inputBusqueda = document.getElementById("busqueda");
+const filtroEstado = document.getElementById("filtro-estado");
+const filtroGenero = document.getElementById("filtro-genero");
+const filtroEspecie = document.getElementById("filtro-especie");
+const botonLimpiar = document.getElementById("boton-limpiar");
 const contenedor = document.getElementById("contenedor-personajes");
 const mensaje = document.getElementById("mensaje");
 const resumen = document.getElementById("resumen");
@@ -24,9 +30,19 @@ let paginaActual = 1;
 let totalPaginas = 1;
 let personajesActuales = [];
 
-// Arma la URL que se le pide a la API
+// Arma la URL con la página, el texto buscado y los filtros elegidos
+// Ejemplo: https://rickandmortyapi.com/api/character?page=1&name=rick&status=alive
 function construirUrl() {
-  return `${API_URL}?page=${paginaActual}`;
+  const parametros = new URLSearchParams();
+  parametros.set("page", paginaActual);
+
+  const nombre = inputBusqueda.value.trim();
+  if (nombre) parametros.set("name", nombre);
+  if (filtroEstado.value) parametros.set("status", filtroEstado.value);
+  if (filtroGenero.value) parametros.set("gender", filtroGenero.value);
+  if (filtroEspecie.value) parametros.set("species", filtroEspecie.value);
+
+  return `${API_URL}?${parametros.toString()}`;
 }
 
 // Pide los personajes a la API con fetch()
@@ -132,6 +148,28 @@ function cambiarPagina(nuevaPagina) {
   obtenerPersonajes();
   document.getElementById("personajes").scrollIntoView({ behavior: "smooth" });
 }
+
+// Cada búsqueda nueva empieza desde la página 1
+function nuevaBusqueda() {
+  paginaActual = 1;
+  obtenerPersonajes();
+}
+
+// Buscador: se ejecuta al presionar "Buscar" o Enter
+formulario.addEventListener("submit", (evento) => {
+  evento.preventDefault(); // evita que el formulario recargue la página
+  nuevaBusqueda();
+});
+
+// Filtros: buscan de nuevo en cuanto el usuario cambia una opción
+[filtroEstado, filtroGenero, filtroEspecie].forEach((filtro) => {
+  filtro.addEventListener("change", nuevaBusqueda);
+});
+
+botonLimpiar.addEventListener("click", () => {
+  formulario.reset();
+  nuevaBusqueda();
+});
 
 botonAnterior.addEventListener("click", () => cambiarPagina(paginaActual - 1));
 botonSiguiente.addEventListener("click", () => cambiarPagina(paginaActual + 1));
