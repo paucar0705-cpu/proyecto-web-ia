@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorador Rick and Morty</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Encabezado con el título y el menú de navegación -->
+  <header class="encabezado">
+    <div class="contenedor encabezado-contenido">
+      <h1>Explorador <span>Rick and Morty</span></h1>
+      <nav class="menu">
+        <a href="#personajes">Personajes</a>
+        <a href="#favoritos">Favoritos (<span id="contador-favoritos">0</span>)</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <!-- Buscador y filtros -->
+    <section class="panel-busqueda" aria-label="Buscador y filtros">
+      <form id="formulario-busqueda" class="formulario">
+        <div class="campo campo-busqueda">
+          <label for="busqueda">Buscar por nombre</label>
+          <input type="search" id="busqueda" placeholder="Ej. Rick, Morty, Summer..." autocomplete="off">
+        </div>
+
+        <div class="campo">
+          <label for="filtro-estado">Estado</label>
+          <select id="filtro-estado">
+            <option value="">Todos</option>
+            <option value="alive">Vivo</option>
+            <option value="dead">Muerto</option>
+            <option value="unknown">Desconocido</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="filtro-genero">Género</label>
+          <select id="filtro-genero">
+            <option value="">Todos</option>
+            <option value="female">Femenino</option>
+            <option value="male">Masculino</option>
+            <option value="genderless">Sin género</option>
+            <option value="unknown">Desconocido</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="filtro-especie">Especie</label>
+          <select id="filtro-especie">
+            <option value="">Todas</option>
+            <option value="Human">Humano</option>
+            <option value="Alien">Alienígena</option>
+            <option value="Humanoid">Humanoide</option>
+            <option value="Robot">Robot</option>
+            <option value="Animal">Animal</option>
+            <option value="Mythological Creature">Criatura mitológica</option>
+            <option value="Cronenberg">Cronenberg</option>
+            <option value="Disease">Enfermedad</option>
+            <option value="Poopybutthole">Poopybutthole</option>
+            <option value="unknown">Desconocida</option>
+          </select>
+        </div>
+
+        <div class="acciones">
+          <button type="submit" class="boton">Buscar</button>
+          <button type="button" id="boton-limpiar" class="boton boton-secundario">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resultados que vienen de la API -->
+    <section id="personajes" class="seccion">
+      <h2>Personajes</h2>
+      <p id="resumen" class="resumen"></p>
+      <div id="mensaje" class="mensaje" role="status" hidden></div>
+      <div id="contenedor-personajes" class="cuadricula"></div>
+
+      <div id="paginacion" class="paginacion" hidden>
+        <button type="button" id="pagina-anterior" class="boton">&larr; Anterior</button>
+        <span id="texto-pagina"></span>
+        <button type="button" id="pagina-siguiente" class="boton">Siguiente &rarr;</button>
+      </div>
+    </section>
+
+    <!-- Favoritos guardados en localStorage -->
+    <section id="favoritos" class="seccion">
+      <h2>Mis favoritos</h2>
+      <p id="mensaje-favoritos" class="mensaje vacio">Aún no tienes favoritos. Presiona "Agregar a favoritos" en cualquier personaje.</p>
+      <div id="contenedor-favoritos" class="cuadricula"></div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <p>Datos obtenidos de <a href="https://rickandmortyapi.com" target="_blank" rel="noopener">The Rick and Morty API</a> · Proyecto de Desarrollo Web</p>
+  </footer>
+
+  <!-- El script va al final para que el HTML ya exista cuando se ejecute -->
+  <script src="script.js"></script>
+</body>
+</html>
