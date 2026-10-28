@@ -1,0 +1,363 @@
+/* ===== Variables de color (se reutilizan en toda la página) ===== */
+:root {
+  --fondo: #f3f6f4;
+  --superficie: #ffffff;
+  --texto: #1d2b24;
+  --texto-suave: #5b6b63;
+  --borde: #d9e2dd;
+  --primario: #2e9e4f;
+  --primario-oscuro: #217a3b;
+  --acento: #00a5c4;
+  --vivo: #2ecc71;
+  --muerto: #e74c3c;
+  --desconocido: #95a5a6;
+  --sombra: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Evita que display:flex/grid le gane al atributo hidden */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.5;
+  transition: background 0.3s, color 0.3s;
+}
+
+.contenedor {
+  width: min(1200px, 100% - 32px);
+  margin-inline: auto;
+}
+
+/* ===== Encabezado ===== */
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(90deg, var(--primario-oscuro), var(--acento));
+  color: #fff;
+  box-shadow: var(--sombra);
+}
+
+.encabezado-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 14px;
+}
+
+.encabezado h1 {
+  font-size: 1.4rem;
+}
+
+.encabezado h1 span {
+  color: #d8ff9e;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.menu a:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== Buscador y filtros ===== */
+.panel-busqueda {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 18px;
+  margin-block: 24px;
+  box-shadow: var(--sombra);
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.campo input,
+.campo select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: var(--fondo);
+  color: var(--texto);
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: 2px solid var(--primario);
+  border-color: transparent;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===== Botones ===== */
+.boton {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: var(--primario);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.boton:hover {
+  background: var(--primario-oscuro);
+}
+
+.boton:active {
+  transform: scale(0.97);
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.boton-secundario {
+  background: var(--desconocido);
+}
+
+.boton-secundario:hover {
+  background: #7f8c8d;
+}
+
+/* ===== Secciones y resultados ===== */
+.seccion {
+  margin-bottom: 40px;
+  scroll-margin-top: 90px; /* para que el encabezado fijo no tape el título */
+}
+
+.seccion h2 {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+}
+
+.resumen {
+  color: var(--texto-suave);
+  margin-bottom: 14px;
+}
+
+.cuadricula {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+/* ===== Tarjeta de personaje ===== */
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--sombra);
+  transition: transform 0.2s;
+}
+
+.tarjeta:hover {
+  transform: translateY(-4px);
+}
+
+.tarjeta img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.tarjeta-cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  padding: 14px;
+}
+
+.tarjeta h3 {
+  font-size: 1.1rem;
+}
+
+.estado {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--desconocido);
+}
+
+.punto.alive {
+  background: var(--vivo);
+}
+
+.punto.dead {
+  background: var(--muerto);
+}
+
+.datos {
+  list-style: none;
+  font-size: 0.88rem;
+  color: var(--texto-suave);
+}
+
+.datos strong {
+  color: var(--texto);
+}
+
+.boton-favorito {
+  margin-top: auto;
+  padding: 8px;
+  font-weight: 600;
+  border: 2px solid #f1c40f;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.boton-favorito.activo {
+  background: #f1c40f;
+  color: #1d2b24;
+}
+
+/* ===== Mensajes (cargando, vacío, error) ===== */
+.mensaje {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  margin-bottom: 18px;
+  text-align: center;
+  border-radius: 12px;
+  background: var(--superficie);
+  border: 1px dashed var(--borde);
+  color: var(--texto-suave);
+}
+
+.mensaje.error {
+  border: 1px solid var(--muerto);
+  color: var(--muerto);
+}
+
+.mensaje.cargando {
+  border-style: solid;
+}
+
+/* ===== Paginación ===== */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  font-weight: 600;
+}
+
+/* ===== Pie de página ===== */
+.pie {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  border-top: 1px solid var(--borde);
+}
+
+.pie a {
+  color: var(--acento);
+}
+
+/* ===== Diseño adaptable (tablets y celulares) ===== */
+@media (max-width: 900px) {
+  .formulario {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .campo-busqueda,
+  .acciones {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .encabezado {
+    position: static;
+  }
+
+  .encabezado-contenido {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .encabezado h1 {
+    font-size: 1.2rem;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones .boton {
+    flex: 1;
+  }
+
+  .cuadricula {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
