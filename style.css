@@ -361,3 +361,29 @@ body {
     gap: 12px;
   }
 }
+/* ===== Mejora extra: modo oscuro ===== */
+/* Solo se cambian los valores de las variables; todo lo demás se adapta solo */
+body.oscuro {
+  --fondo: #0f1a17;
+  --superficie: #182621;
+  --texto: #e6f2ec;
+  --texto-suave: #a3b8ad;
+  --borde: #2b3d36;
+  --sombra: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Botón para cambiar de tema (en el menú del encabezado) */
+.boton-tema {
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+}
+
+.boton-tema:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
